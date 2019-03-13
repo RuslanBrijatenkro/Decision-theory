@@ -8,7 +8,7 @@ namespace lab1tables
 {
 	class Algorithms
 	{
-		public static int[] mas1 = new int[] { 79, 95, 4, 37, 92, 95, 12, 52, 70, 14 };
+		public static int[] mas1 = new int[] { 28, 71, 32, 29, 03, 19, 70, 68, 08, 15, 40, 49, 96, 23, 18, 45, 46, 51, 21, 55 };
 		public int[,] mas1q1q2 = new int[mas1.Length, 2];
 		public List<int[]> decisionPareto = new List<int[]>();
 		public List<int[]> decisionSlayter = new List<int[]>();
@@ -16,6 +16,7 @@ namespace lab1tables
 		{
 			CreateAlternative();
 			SlayterAlgorithm();
+			ParetoAlgorithm();
 		}
 		public void ParetoAlgorithm()
 		{
