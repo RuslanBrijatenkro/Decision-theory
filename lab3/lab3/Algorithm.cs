@@ -11,10 +11,14 @@ namespace lab3
 	class Algorithm
 	{
 		int set=0;
-		int minimalExpenses;
+		double minimalExpenses;
 		int minimalExpensesSet;
-		int setExpenceses;
-		int[] temperatures = new int[] { -11, -11, -6, -1, 4, 10, 13, 11, 7, 1, -5, -9 };
+		double setExpenceses;
+
+		List<int> temperatures=new List<int>();
+		List<double> probabilities = new List<double>();
+		List<string> names = new List<string>();
+
 		int costs = 0;
 
 		SqlCommand sqlCommand;
@@ -32,6 +36,7 @@ namespace lab3
 
 		string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 		string tableName;
+		string inputDataTable;
 
 		public void Run()
 		{
@@ -40,31 +45,53 @@ namespace lab3
 			connection3 = new SqlConnection(connectionString);
 			executeQueryConnection = new SqlConnection(connectionString);
 			tableName=Console.ReadLine();
+			inputDataTable = Console.ReadLine();
+			InputData(inputDataTable);
 			FillResultTable();
 
 		}
+		void InputData(string inputDataTable)
+		{
+			reader = ExecuteReader( $"SELECT *" +
+									$"FROM {inputDataTable}",connection);
+			while(reader.Read())
+			{
+				temperatures.Add(Convert.ToInt32(reader.GetValue(0)));
+				probabilities.Add(Convert.ToDouble(reader.GetValue(1)));
+				names.Add(Convert.ToString(reader.GetValue(2)));
+			}
+			connection.Close();
+		}
 		void FillResultTable()
 		{
-			reader = ExecuteReader("SELECT Hat,Outerwear,Gloves,Trousers,Footwear,Weight FROM SetsOfClothes", connection);
+			reader = ExecuteReader( "SELECT Hat,Outerwear,Gloves,Trousers,Footwear,Weight " +
+									"FROM SetsOfClothes", connection);
 
 			ExecuteQuery($"CREATE TABLE {tableName}(SetNumber nvarchar(50), WeightCost float);");
 
-			for (int i = 0; i < temperatures.Length; i++)
+			for (int i = 0; i < temperatures.Count; i++)
 			{
-				ExecuteQuery($"ALTER TABLE {tableName} ADD [{i + 1}] int");
+				ExecuteQuery($"ALTER TABLE {tableName} " +
+							 $"ADD {names[i]} nvarchar(50)");
 			}
 
 			while (reader.Read())
 			{
 				set++;
 
-				ExecuteQuery($"INSERT INTO {tableName}(SetNumber) VALUES ({set});");
-				ExecuteQuery($"UPDATE {tableName} SET WeightCost={Convert.ToDouble(reader.GetValue(5)) * 10} WHERE SetNumber = {set}");
+				ExecuteQuery($"INSERT INTO {tableName}(SetNumber) " +
+							 $"VALUES ({set});");
 
-				for (int i = 0; i < temperatures.Length; i++)
+				ExecuteQuery($"UPDATE {tableName} " +
+							 $"SET WeightCost={Convert.ToDouble(reader.GetValue(5)) * 10} " +
+							 $"WHERE SetNumber = {set}");
+
+				for (int i = 0; i < temperatures.Count; i++)
 				{
 					costs = 0;
-					reader2 = ExecuteReader($"SELECT TOP 1 Hat,Outerwear,Gloves,Trousers,Footwear FROM SetsOfClothes WHERE Temperature>={temperatures[i]}", connection2);
+					reader2 = ExecuteReader($"SELECT TOP 1 Hat,Outerwear,Gloves,Trousers,Footwear " +
+											$"FROM SetsOfClothes " +
+											$"WHERE Temperature>={temperatures[i]}", connection2);
 					reader2.Read();
 					for (int y = 0; y < 5; y++)
 					{
@@ -74,7 +101,9 @@ namespace lab3
 						{
 							if ((string)reader.GetValue(y) != (string)reader2.GetValue(y))
 							{
-								reader3 = ExecuteReader($"SELECT Price FROM ClothingItems WHERE ClothingItem = '{reader2.GetValue(y)}'", connection3);
+								reader3 = ExecuteReader($"SELECT Price " +
+														$"FROM ClothingItems " +
+														$"WHERE ClothingItem = '{reader2.GetValue(y)}'", connection3);
 								reader3.Read();
 								costs += (int)reader3.GetValue(0) + 2;
 								connection3.Close();
@@ -83,7 +112,9 @@ namespace lab3
 						catch (Exception) { }
 
 					}
-					ExecuteQuery($"UPDATE {tableName} SET [{i + 1}]={costs} WHERE SetNumber = {set}");
+					ExecuteQuery($"UPDATE {tableName} " +
+								 $"SET {names[i]}={costs}" +
+								 $"WHERE SetNumber = {set}");
 					connection2.Close();
 				}
 			}
@@ -102,10 +133,11 @@ namespace lab3
 			while(reader.Read())
 			{
 				set++;
-				for(int i=0;i<reader.VisibleFieldCount;i++)
+				for(int i=1;i<reader.VisibleFieldCount;i++)
 				{
-					setExpenceses+=Convert.ToInt32(reader.GetValue(i));
+					setExpenceses+=(Convert.ToInt32(reader.GetValue(i)) + Convert.ToInt32(reader.GetValue(0))) * probabilities[i-1];
 				}
+				Console.WriteLine(setExpenceses);
 				if(setExpenceses<minimalExpenses||set==1)
 				{
 					minimalExpenses = setExpenceses;
