@@ -133,6 +133,7 @@ namespace lab3
 			while(reader.Read())
 			{
 				set++;
+				setExpenceses = 0;
 				for(int i=1;i<reader.VisibleFieldCount;i++)
 				{
 					setExpenceses+=(Convert.ToInt32(reader.GetValue(i)) + Convert.ToInt32(reader.GetValue(0))) * probabilities[i-1];
