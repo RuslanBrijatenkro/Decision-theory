@@ -8,8 +8,9 @@ namespace lab1tables
 {
 	class Algorithms
 	{
-		public static int[] mas1 = new int[] { 90, 76, 99, 52, 31, 87, 77, 99, 57, 66,
-					 52, 17, 41, 35, 68, 98, 84, 95, 76, 5 };
+		public static int[] mas1 = new int[] { 40  , 29 , 31 , 17 , 97 , 71 , 81 , 75 , 09 , 27 , 67 , 56 , 97 , 53 , 86 , 65 , 06 , 83 , 19 , 24 ,28 ,  71 , 32 , 29 , 03 , 19 , 70 , 68 ,
+			08 , 15 , 40 , 49 , 96 , 23 , 18 , 45 , 46 , 51 , 21 , 55 ,79 ,  88 , 64 , 28 , 41 , 50 , 93 , 51 , 34 , 64 , 24 , 14 , 87 , 56 ,
+			43 , 91  ,27  ,65  ,59  ,36 };
 		public int[,] mas1q1q2 = new int[mas1.Length, 2];
 		public List<int[]> decisionPareto = new List<int[]>();
 		public List<int[]> decisionSlayter = new List<int[]>();

@@ -88,6 +88,7 @@ namespace lab1tables
 		private void button1_Click(object sender, EventArgs e)
 		{
 			Start();
+			button1.Hide();
 		}
 
 		private void pictureBox1_Click(object sender, EventArgs e)
