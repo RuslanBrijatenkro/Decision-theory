@@ -44,7 +44,9 @@ namespace lab3
 			connection2 = new SqlConnection(connectionString);
 			connection3 = new SqlConnection(connectionString);
 			executeQueryConnection = new SqlConnection(connectionString);
+			Console.WriteLine("Create table with name:");
 			tableName=Console.ReadLine();
+			Console.WriteLine("Input table name:");
 			inputDataTable = Console.ReadLine();
 			InputData(inputDataTable);
 			FillResultTable();
@@ -138,7 +140,7 @@ namespace lab3
 				{
 					setExpenceses+=(Convert.ToInt32(reader.GetValue(i)) + Convert.ToInt32(reader.GetValue(0))) * probabilities[i-1];
 				}
-				Console.WriteLine(setExpenceses);
+				Console.WriteLine($"Set {set} expenceses: "+setExpenceses);
 				if(setExpenceses<minimalExpenses||set==1)
 				{
 					minimalExpenses = setExpenceses;
