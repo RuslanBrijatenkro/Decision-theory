@@ -12,12 +12,13 @@ namespace lab3
 		static SqlCommand sqlCommand;
 		static void Main(string[] args)
 		{
-			double f = 31d / 366;
-			double s = 30d / 366;
-			double t = 29d / 366;
+			//double a = 1/6d;
+			//double b = 1/18d;
+
 			Algorithm algorithm = new Algorithm();
 			algorithm.Run();
-			Console.WriteLine(154d*f+154d*t+116d*f+84d*s+84d*f+30d*s+30d*f+84d*f+84d*s+116d*f+116d*s+116d*f);
+			//Console.WriteLine(154d*a+154d*a+116d*b+116d*b+84d*b+84d*b+30d*b+30d*b+84d*b+84d*b+116d*b+116d*a);//Task44
+
 			Console.ReadKey();
 		}
 	}
