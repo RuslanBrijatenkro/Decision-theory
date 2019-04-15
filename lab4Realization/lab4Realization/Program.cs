@@ -17,8 +17,9 @@ namespace lab4Realization
 	{
 		public void Run()
 		{
-			//Bord();
+			Bord();
 			Coplend();
+			Parallel();
 		}
 		void Bord()
 		{
@@ -67,6 +68,8 @@ namespace lab4Realization
 			Dictionary<string, int> scores = new Dictionary<string, int>();
 			using (lab4Context context = new lab4Context())
 			{
+				string message = null;
+				int max=0;
 				var list = context.GetVotes.ToList();
 				string[] candidates = new string[] {"a","b","c","d"};
 				foreach (var item in candidates)
@@ -110,9 +113,92 @@ namespace lab4Realization
 				}
 				foreach (var item in scores)
 				{
+					if (item.Value > max)
+					{
+						max = item.Value;
+						message = $"Winner! {item.Key}-{item.Value}";
+					}
 					Console.WriteLine($"{item.Key}-{item.Value}");
 				}
+				Console.WriteLine(message);
 			}
+		}
+		void Parallel()
+		{
+			Dictionary<string, int> result = new Dictionary<string, int>();
+			using (lab4Context context = new lab4Context())
+			{
+				var list = context.GetVotes.ToList();
+				List<string> candidates = new List<string> {list[0].First, list[0].Second, list[0].Third , list[0].Fourth };
+				foreach(var item in candidates)
+				{
+					result.Add(item, 0);
+				}
+				while(result.Count!=1)
+				{
+					int value;
+					for (int i = 0; i < result.Count; i++)
+					{
+						if(result.TryGetValue(candidates[i],out value))
+						{
+							result[candidates[i]] = 0;
+						}
+					}
+					value = candidates.Count;
+					for (int i = 0; i < candidates.Count;)
+					{
+						try
+						{
+							Comparison(candidates[i], candidates[++i]);
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine(e.Message);
+							break;
+						}
+					}
+				}
+				foreach (var item in result)
+				{
+					Console.WriteLine("Winner - "+item.Key+":"+item.Value);
+				}
+				Console.ReadKey();
+				void Comparison(string first, string second)
+				{
+					foreach (var item in list)
+					{
+						string[] brrrrr = new string[] { item.First, item.Second, item.Third, item.Fourth };
+						for (int i = 0; i < brrrrr.Length; i++)
+						{
+							if(first==brrrrr[i])
+							{
+								result[first] += item.VotesCount;
+								break;
+							}
+							else if(second==brrrrr[i])
+							{
+								result[second] += item.VotesCount;
+								break;
+							}
+						}
+					}
+					if(result[first]>result[second])
+					{
+						Console.WriteLine(second+":"+result[second]+" < "+first+":"+result[first]);
+						Console.WriteLine(second+":"+result[second]+" deleted");
+						candidates.Remove(second);
+						result.Remove(second);
+					}
+					else
+					{
+						Console.WriteLine(first + ":" + result[first] + " < " + second + ":" + result[second]);
+						Console.WriteLine(first + ":" + result[first] + " deleted");
+						candidates.Remove(first);
+						result.Remove(first);
+					}
+				}
+			}
+
 		}
 	}
 }
