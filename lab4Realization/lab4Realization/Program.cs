@@ -144,7 +144,6 @@ namespace lab4Realization
 							result[candidates[i]] = 0;
 						}
 					}
-					value = candidates.Count;
 					for (int i = 0; i < candidates.Count;)
 					{
 						try
