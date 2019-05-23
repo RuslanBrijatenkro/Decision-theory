@@ -17,8 +17,11 @@ namespace lab4Realization
 	{
 		public void Run()
 		{
+			Console.WriteLine("Bord");
 			Bord();
+			Console.WriteLine("Coplend");
 			Coplend();
+			Console.WriteLine("Parallel");
 			Parallel();
 		}
 		void Bord()
@@ -101,11 +104,13 @@ namespace lab4Realization
 						}
 						if (IScores > JScores)
 						{
+							Console.WriteLine($"{candidates[i]}: {IScores} > {candidates[j]}: {JScores}");
 							scores[candidates[i]]++;
 							scores[candidates[j]]--;
 						}
 						else
 						{
+							Console.WriteLine($"{candidates[i]}: {IScores} < {candidates[j]}: {JScores}");
 							scores[candidates[j]]++;
 							scores[candidates[i]]--;
 						}
@@ -116,9 +121,9 @@ namespace lab4Realization
 					if (item.Value > max)
 					{
 						max = item.Value;
-						message = $"Winner! {item.Key}-{item.Value}";
+						message = $"Winner! {item.Key} score:{item.Value}";
 					}
-					Console.WriteLine($"{item.Key}-{item.Value}");
+					Console.WriteLine($"{item.Key} score:{item.Value}");
 				}
 				Console.WriteLine(message);
 			}
